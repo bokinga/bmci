@@ -63,6 +63,12 @@ RUN curl -Lo /var/tmp/wp-cli.phar https://raw.githubusercontent.com/wp-cli/build
 RUN	chmod +x /var/tmp/wp-cli.phar
 RUN	mv /var/tmp/wp-cli.phar /usr/local/bin/wp
 
+# add mailhog
+RUN echo 'SMTP=mailhog' >> /etc/php.ini
+RUN echo 'smtp_port=1025' >> /etc/php.ini
+
+# mk site dir
+RUN mkdir /var/www/html/phpsite
 
 ADD ./supervisord.conf /etc/
 ADD ./default.conf /etc/httpd/conf.d/default.conf

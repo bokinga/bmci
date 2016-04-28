@@ -63,6 +63,11 @@ RUN curl -Lo /var/tmp/wp-cli.phar https://raw.githubusercontent.com/wp-cli/build
 RUN	chmod +x /var/tmp/wp-cli.phar
 RUN	mv /var/tmp/wp-cli.phar /usr/local/bin/wp
 
+# add timezone
+RUN echo 'date.timezone = Europe/London' >> /etc/php.ini
+RUN rm -r /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+
 # mk site dir
 RUN mkdir /var/www/html/phpsite
 

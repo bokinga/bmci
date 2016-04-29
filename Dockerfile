@@ -1,28 +1,28 @@
-FROM centos:6.7 
-MAINTAINER Russell Kirkland <russell@fffunction.co> 
+FROM centos:6.7
+MAINTAINER Russell Kirkland <russell@fffunction.co>
 
-# install http 
+# install http
 RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
-# install httpd 
+# install httpd
 RUN yum -y install httpd vim-enhanced bash-completion unzips
 
-# install php 
+# install php
 RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 RUN yum install -y php55w php55w-mysql php55w-devel php55w-gd php55w-pecl-memcache php55w-pspell php55w-snmp php55w-xmlrpc php55w-xml
 
-# install supervisord 
+# install supervisord
 RUN yum install -y python-pip && pip install pip --upgrade
 RUN pip install meld3==1.0.0
 RUN pip install supervisor
 
-# install sshd 
+# install sshd
 RUN yum install -y openssh-server openssh-clients passwd
 
-RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
+RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
 RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:changeme' | chpasswd
 
-# ssl 
+# ssl
 RUN yum install -y mod_ssl openssl
 
 # forward request and error logs to docker log collector
@@ -62,6 +62,10 @@ RUN	chmod +x /usr/local/bin/phpunit
 RUN curl -Lo /var/tmp/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 RUN	chmod +x /var/tmp/wp-cli.phar
 RUN	mv /var/tmp/wp-cli.phar /usr/local/bin/wp
+
+# Install node + npm
+RUN curl --silent --location https://rpm.nodesource.com/setup_5.x | bash -
+RUN yum -y install nodejs
 
 # add timezone
 RUN echo 'date.timezone = Europe/London' >> /etc/php.ini

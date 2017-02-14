@@ -1,15 +1,17 @@
-FROM centos:6.7
+FROM centos:6.8
 MAINTAINER Russell Kirkland <russell@fffunction.co>
 
-# install http
-RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-
-# install httpd
-RUN yum -y install httpd vim-enhanced bash-completion unzips
-
 # install php
-RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+RUN rpm -iUvh http://mirror.webtatic.com/yum/el6/latest.rpm
+RUN yum update -y
+RUN yum clean all -y
 RUN yum install -y php55w php55w-mysql php55w-devel php55w-gd php55w-pecl-memcache php55w-pspell php55w-snmp php55w-xmlrpc php55w-xml
+
+# install http
+RUN rpm -iUvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+RUN yum update -y
+RUN yum clean all -y
+RUN yum -y install httpd vim-enhanced bash-completion unzips
 
 # install supervisord
 RUN yum install -y python-pip && pip install pip --upgrade
@@ -64,7 +66,7 @@ RUN	chmod +x /var/tmp/wp-cli.phar
 RUN	mv /var/tmp/wp-cli.phar /usr/local/bin/wp
 
 # Install node + npm
-RUN curl --silent --location https://rpm.nodesource.com/setup_5.x | bash -
+RUN curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
 RUN yum -y install nodejs
 
 # add timezone
